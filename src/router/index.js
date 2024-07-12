@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import CategoriaView from "../views/CategoriaView.vue";
 import AcessorioView from "../views/AcessorioView.vue";
 import CorView from "../views/CorView.vue";
+import MarcaView from "../views/MarcaView.vue";
 import LoginView from "../views/LoginView.vue";
 import LogoutView from "../views/LogoutView.vue";
 
@@ -28,6 +29,11 @@ const router = createRouter({
       path: "/cores",
       name: "cores",
       component: CorView,
+    },
+    {
+      path: "/marcas",
+      name: "marcas",
+      component: MarcaView,
     },
     {
       path: "/login",
