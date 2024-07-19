@@ -1,14 +1,23 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import ModelosApi from "@/api/modelos";
-const modelosApi = new ModelosApi();
+import MarcasApi from "@/api/marcas";
+import CategoriasApi from "@/api/categorias";
 
-const defaultModelo = { id: null, nome: "", marca: "", categoria: "" };
+const modelosApi = new ModelosApi();
+const marcasApi = new MarcasApi();
+const categoriasApi = new CategoriasApi();
+
+const defaultModelo = { id: null, nome: ""};
 const modelos = ref([]);
+const marcas = ref([]);
+const categorias = ref([]);
 const modelo = reactive({ ...defaultModelo });
 
 onMounted(async () => {
   modelos.value = await modelosApi.buscarTodosOsModelos();
+  marcas.value = await marcasApi.buscarTodasAsMarcas();
+  categorias.value = await categoriasApi.buscarTodasAsCategorias();
 });
 
 function limpar() {
@@ -42,9 +51,15 @@ async function excluir(id) {
   <div class="form">
     <input type="text" v-model="modelo.nome" placeholder="Nome" />
     <select v-model="modelo.marca" name="marcas" id="marcas">
-      <option value=""></option>
+      <option :value="marca.id" v-for="marca in marcas" :key="marca.id">
+        {{ marca.nome }}
+      </option>
     </select>
-    <!-- modelo e categoria -->
+    <select v-model="modelo.categoria" name="categorias" id="categorias">
+      <option :value="categoria.id" v-for="categoria in categorias" :key="categoria.id">
+        {{ categoria.descricao }}
+      </option>
+    </select>
     <button @click="salvar">Salvar</button>
     <button @click="limpar">Limpar</button>
   </div>
