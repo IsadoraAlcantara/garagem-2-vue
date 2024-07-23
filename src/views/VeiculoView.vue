@@ -5,12 +5,16 @@ import CoresApi from '@/api/cores'
 import ModelosApi from '@/api/modelos'
 import AcessoriosApi from '@/api/acessorios'
 
+import Button from "../components/ButtonComponent.vue"
+// import BtSave from "../components/BtSaveComponent.vue"
+import Input from "../components/InputComponent.vue"
+
 const veiculosApi = new VeiculosApi()
 const coresApi = new CoresApi()
 const modelosApi = new ModelosApi()
 const acessoriosApi = new AcessoriosApi()
 
-const defaultVeiculos = { id: null, ano: '', preco: '' }
+const defaultVeiculos = { id: null, ano: '', preco: '', acessorio: '', modelo: '', cor: '' }
 const veiculos = ref([])
 const cores = ref([])
 const modelos = ref([])
@@ -51,9 +55,10 @@ async function excluir(id) {
 
 <template>
   <div class="main">
-    <h1>Veiculos</h1>
+    <h1>Veículos</h1>
     <div class="container-select">
       <div class="form">
+        <Input />
         <input type="text" v-model="veiculo.ano" placeholder="Ano" />
         <input type="text" v-model="veiculo.preco" placeholder="Preço" />
         <select v-model="veiculo.cor" name="cores" id="cores">
@@ -71,8 +76,7 @@ async function excluir(id) {
             {{ acessorio.descricao }}
           </option>
         </select>
-        <button @click="salvar">Salvar</button>
-        <button @click="limpar">Limpar</button>
+        <Button @salvar="salvar()" @limpar="limpar()"/>
       </div>
       <ul>
         <li v-for="veiculo in veiculos" :key="veiculo.id">

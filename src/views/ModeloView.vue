@@ -8,7 +8,7 @@ const modelosApi = new ModelosApi()
 const marcasApi = new MarcasApi()
 const categoriasApi = new CategoriasApi()
 
-const defaultModelo = { id: null, nome: '' }
+const defaultModelo = { id: null, nome: '', marca: '', categoria: '' }
 const modelos = ref([])
 const marcas = ref([])
 const categorias = ref([])

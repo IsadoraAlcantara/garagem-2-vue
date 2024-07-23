@@ -2,6 +2,7 @@
 import { onMounted } from 'vue';
 import { PassageUser } from '@passageidentity/passage-elements/passage-user';
 import { useAuthStore } from '@/stores/auth';
+import Button from "../components/ButtonComponent.vue";
 
 const authStore = useAuthStore();
 
@@ -26,5 +27,10 @@ onMounted(() => {
 </script>
 
 <template>
+  <Button>
+    <template v-slot:botao>
+      Salvar
+    </template>
+  </Button>
   <product-list />
 </template>
