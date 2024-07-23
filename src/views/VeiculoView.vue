@@ -1,58 +1,90 @@
 <script setup>
-import { ref, reactive, onMounted } from "vue";
-import VeiculosApi from "@/api/veiculo";
-const veiculoApi = new VeiculosApi();
+import { ref, reactive, onMounted } from 'vue'
+import VeiculosApi from '@/api/veiculos'
+import CoresApi from '@/api/cores'
+import ModelosApi from '@/api/modelos'
+import AcessoriosApi from '@/api/acessorios'
 
-const defaultCor = { id: null, nome: "" };
-const veiculo = ref([]);
-const cor = reactive({ ...defaultCor });
+const veiculosApi = new VeiculosApi()
+const coresApi = new CoresApi()
+const modelosApi = new ModelosApi()
+const acessoriosApi = new AcessoriosApi()
+
+const defaultVeiculos = { id: null, ano: '', preco: '' }
+const veiculos = ref([])
+const cores = ref([])
+const modelos = ref([])
+const acessorios = ref([])
+const veiculo = reactive({ ...defaultVeiculos })
 
 onMounted(async () => {
-  veiculo.value = await veiculoApi.buscarTodosOsVeiculos();
-});
+  veiculos.value = await veiculosApi.buscarTodosOsVeiculos()
+  cores.value = await coresApi.buscarTodasAsCores()
+  modelos.value = await modelosApi.buscarTodosOsModelos()
+  acessorios.value = await acessoriosApi.buscarTodosOsAcessorios()
+})
 
 function limpar() {
-  Object.assign(cor, { ...defaultCor });
+  Object.assign(veiculo, { ...defaultVeiculos })
 }
 
 async function salvar() {
-  if (cor.id) {
-    await veiculoApi.atualizarCor(cor);
+  if (veiculo.id) {
+    await veiculosApi.atualizarVeiculo(veiculo);
   } else {
-    await veiculoApi.adicionarCor(cor);
+    await veiculosApi.adicionarVeiculo(veiculo);
   }
-  veiculo.value = await veiculoApi.buscarTodosOsVeiculos();
-  limpar();
+  veiculos.value = await veiculosApi.buscarTodosOsVeiculos()
+  limpar()
 }
 
-function editar(cor_para_editar) {
-  Object.assign(cor, cor_para_editar);
+function editar(veiculo_para_editar) {
+  Object.assign(veiculo, veiculo_para_editar)
 }
 
 async function excluir(id) {
-  await veiculoApi.excluirCor(id);
-  veiculo.value = await veiculoApi.buscarTodosOsVeiculos();
-  limpar();
+  await veiculosApi.excluirVeiculos(id)
+  veiculos.value = await veiculosApi.buscarTodasOsVeiculos()
+  limpar()
 }
 </script>
 
 <template>
-  <h1>Cor</h1>
-  <hr />
-  <div class="form">
-    <input type="text" v-model="cor.nome" placeholder="Nome" />
-    <button @click="salvar">Salvar</button>
-    <button @click="limpar">Limpar</button>
+  <div class="main">
+    <h1>Veiculos</h1>
+    <div class="container-select">
+      <div class="form">
+        <input type="text" v-model="veiculo.ano" placeholder="Ano" />
+        <input type="text" v-model="veiculo.preco" placeholder="Preço" />
+        <select v-model="veiculo.cor" name="cores" id="cores">
+          <option :value="cor.id" v-for="cor in cores" :key="cor.id">
+            {{ cor.nome }}
+          </option>
+        </select>
+        <select v-model="veiculo.modelo" name="modelos" id="modelos">
+          <option :value="modelo.id" v-for="modelo in modelos" :key="modelo.id">
+            {{ modelo.nome }}
+          </option>
+        </select>
+        <select v-model="veiculo.acessorio" name="acessorios" id="acessorios">
+          <option :value="acessorio.id" v-for="acessorio in acessorios" :key="acessorio.id">
+            {{ acessorio.descricao }}
+          </option>
+        </select>
+        <button @click="salvar">Salvar</button>
+        <button @click="limpar">Limpar</button>
+      </div>
+      <ul>
+        <li v-for="veiculo in veiculos" :key="veiculo.id">
+          <span @click="editar(veiculo)">
+            ({{ veiculo.id }}) - {{ veiculo.ano }} - {{ veiculo.preco }} - {{ veiculo.cor }} -
+            {{ veiculo.modelo }} - {{ veiculo.acessorio }}
+          </span>
+          <button class="bt-delete" @click="excluir(veiculo.id)">X</button>
+        </li>
+      </ul>
+    </div>
   </div>
-  <hr />
-  <ul>
-    <li v-for="cor in veiculo" :key="cor.id">
-      <span @click="editar(cor)">
-        ({{ cor.id }}) - {{ cor.nome }} -
-      </span>
-      <button @click="excluir(cor.id)">X</button>
-    </li>
-  </ul>
 </template>
 
 <style></style>
