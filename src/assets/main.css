@@ -38,6 +38,14 @@ h1 {
   margin: 5vw 0 2vw 0;
 }
 
+button {
+  background-color: #292d73;
+  color: white;
+  border: none;
+  padding: 0.6vw;
+  border-radius: 5px;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -64,6 +72,15 @@ h1 {
   height: 3vw;
   margin: 0 1vw;
 }
+
+input {
+  padding: 0.8vw;
+  border-radius: 5px;
+  border: solid #797e8c 1px;
+  outline: none;
+  width: 15vw;
+}
+
 ul {
   padding: 0;
 }
